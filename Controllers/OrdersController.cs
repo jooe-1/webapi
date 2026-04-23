@@ -12,6 +12,25 @@ public class OrdersController : ControllerBase
         _context = context;
     }
 
+    // اللينك هيكون: api/orders
+    [HttpGet]
+    public IActionResult GetAllOrders()
+    {
+        // بيجيب كل الطلبات من الداتابيز ويحولها لـ List
+        var orders = _context.Orders.ToList();
+        return Ok(orders);
+    }
+
+// لو عايز تجيب طلب واحد بالـ ID
+// اللينك هيكون: api/orders/5
+    [HttpGet("{id}")]
+    public IActionResult GetOrderById(int id)
+    {
+        var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+        if (order == null) return NotFound(new { message = "الطلب مش موجود" });
+        return Ok(order);
+    }
+    
     [HttpPost("checkout")]
     public IActionResult Checkout([FromBody] Orders order)
     {
