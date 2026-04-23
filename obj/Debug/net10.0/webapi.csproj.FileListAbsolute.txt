@@ -202,3 +202,4 @@
 /home/youssef/RiderProjects/APIs/webapi/bin/Debug/net10.0/runtimes/win-x64/native/e_sqlite3.dll
 /home/youssef/RiderProjects/APIs/webapi/bin/Debug/net10.0/runtimes/win-x86/native/e_sqlite3.dll
 /home/youssef/RiderProjects/APIs/webapi/obj/Debug/net10.0/webapi.sourcelink.json
+/home/youssef/RiderProjects/APIs/webapi/bin/Debug/net10.0/postman/collections/53241960-0acd77d0-96bb-41f3-a68d-b87c18648523.json
