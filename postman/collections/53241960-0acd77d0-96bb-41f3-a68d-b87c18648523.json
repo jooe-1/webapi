@@ -168,7 +168,21 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://jooe.runasp.net/api/orders/",
+							"protocol": "http",
+							"host": [
+								"jooe",
+								"runasp",
+								"net"
+							],
+							"path": [
+								"api",
+								"orders",
+								""
+							]
+						}
 					},
 					"response": []
 				}
