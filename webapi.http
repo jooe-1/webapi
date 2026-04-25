@@ -1,4 +1,4 @@
-@webapi = http://localhost:5159
+@webapi = http://jooe.runasp.net
 
 GET {{webapi}}/weatherforecast/
 Accept: application/json
