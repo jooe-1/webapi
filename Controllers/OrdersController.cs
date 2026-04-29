@@ -5,6 +5,7 @@ using System.Security.Claims;
 using webapi.Data;
 using webapi.DTOs;
 using webapi.Models;
+using webapi;
 
 namespace webapi.Controllers;
 
@@ -14,10 +15,12 @@ namespace webapi.Controllers;
 public class OrdersController : ControllerBase 
 {
     private readonly AppDbContext _context;
+    private readonly IPaymentService _paymentService;
 
-    public OrdersController(AppDbContext context)
+    public OrdersController(AppDbContext context, IPaymentService paymentService)
     {
         _context = context;
+        _paymentService = paymentService;
     }
 
     // اللينك هيكون: api/orders
@@ -40,7 +43,7 @@ public class OrdersController : ControllerBase
             .Include(o => o.Items) // عشان يجيب تفاصيل الأيتمز مع الطلب
             .FirstOrDefault(o => o.Id == id);
         if (order is null)
-            return NotFound(new { message = "Order does not exist" });
+            return NotFound(new ApiResponse("Order does not exist"));
         return Ok(order);
     }
     
@@ -49,31 +52,35 @@ public class OrdersController : ControllerBase
     public IActionResult Checkout([FromBody] OrderDto dto)
     {
         if (dto.Items is null || dto.Items.Count == 0)
-            return BadRequest(new { message = "Order must contain at least one item." });
+            return BadRequest(new ApiResponse("Order must contain at least one item."));
+
+        var dishQuantities = new List<Dish>();
         foreach (var item in dto.Items)
         {
             var dish = _context.Dishes.Find(item.DishId);
             if (dish is null)
-                return BadRequest(new { message = $"Dish with ID {item.DishId} does not exist!" });
+                return BadRequest(new ApiResponse($"Dish with ID {item.DishId} does not exist!"));
             if (dish.AvailableQty < item.Quantity)
-                return BadRequest(new { message = $"Not enough bowls available for \"{dish.Name}\"!" });
+                return BadRequest(new ApiResponse($"Not enough bowls available for \"{dish.Name}\"!"));
+            dishQuantities.Add(dish);
+        }
+
+        var total = 0m;
+
+        foreach (var dish in dishQuantities)
+        {
+            total += dish.Price * item.Quantity;
         }
 
         var order = new Order
         {
             CustomerName = dto.CustomerName,
             Status = dto.Status ?? "Pending",
-            TotalPayment = 0m,
+            TotalPayment = total,
             Items = dto.Items,
             UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value)
         };
 
-        foreach (var item in order.Items)
-        {
-            var dish = _context.Dishes.First(d => d.Id == item.DishId);
-            dish.AvailableQty -= item.Quantity;
-            order.TotalPayment += dish.Price * item.Quantity;
-        }
 
         _context.Orders.Add(order);
         _context.SaveChanges();
