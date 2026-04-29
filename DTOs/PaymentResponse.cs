@@ -1,6 +1,3 @@
-﻿namespace webapi.DTOs
-{
-    public class PaymentResponse
-    {
-    }
-}
+﻿namespace webapi.DTOs;
+
+public record PaymentResponse(bool IsSuccess, string TransactionId, string Message);

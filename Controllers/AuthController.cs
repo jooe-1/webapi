@@ -24,6 +24,24 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public ActionResult<List<User>> GetAllUsers()
+    {
+        var users = _context.Users.ToList();
+        return Ok(users);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Admin")]
+    public ActionResult<User> GetUserById(int id)
+    {
+        var user = _context.Users.Find(id);
+        if (user is null)
+            return NotFound(new ApiResponse("User does not exist!"));
+        return Ok(user);
+    }
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] UserDto loginInfo)
     {
@@ -59,7 +77,7 @@ public class AuthController : ControllerBase
     public ActionResult<User> Register([FromBody] UserCreateDto registerInfo)
     {
         if (_context.Users.Any(u => u.Username == registerInfo.Username))
-            return BadRequest(new ApiResponse("Username already exists!" ));
+            return BadRequest(new ApiResponse("Username already exists!"));
         if (!Models.User.IsValidRole(registerInfo.Role))
             return BadRequest(new ApiResponse("Invalid role! Role must be either 'Admin' or 'Cashier'."));
         var hasher = new PasswordHasher<User>();

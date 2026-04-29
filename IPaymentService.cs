@@ -1,6 +1,8 @@
-﻿namespace webapi
+﻿using webapi.DTOs;
+
+namespace webapi;
+
+public interface IPaymentService
 {
-    public class IPaymentService
-    {
-    }
+    Task<PaymentResponse> ProcessPaymentAsync(decimal amount);
 }
