@@ -1,6 +1,5 @@
-@webapi = http://localhost:5093
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInJvbGUiOiJBZG1pbiIsIm5hbWVpZCI6IjEiLCJuYmYiOjE3Nzc0NzE5NzAsImV4cCI6MTc3NzU1ODM3MCwiaWF0IjoxNzc3NDcxOTcwfQ.OK0Xkw0-naWIFRTRhiKcLffdzG8rtIlE2uQNY2ly8U0
-@cToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkNhc2hpZXJVc2VyIiwicm9sZSI6IkNhc2hpZXIiLCJuYW1laWQiOiIyIiwibmJmIjoxNzc3NDcyMTM2LCJleHAiOjE3Nzc1NTg1MzYsImlhdCI6MTc3NzQ3MjEzNn0.fdfrO9M5WG5yO6EhXprJ2p9os3c7hgar-6VKSPAOi7c
+@webapi = http://localhost:5159
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInJvbGUiOiJBZG1pbiIsIm5hbWVpZCI6IjEiLCJuYmYiOjE3Nzc1NzgyMjksImV4cCI6MTc3NzY2NDYyOSwiaWF0IjoxNzc3NTc4MjI5fQ.NdEb9cfgmc5hmv4WnqyWafcvzqda3zpnIBuzGVzI9GA
 
 GET {{webapi}}/api/dishes
 Accept: application/json
@@ -13,19 +12,20 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "Name": "Pepperoni Pizza", 
+    "Name": "chicken ranch Pizza", 
     "Price": 100, 
     "AvailableQty": 20,
     "CategoryId": 2
 }
 ###
 POST {{webapi}}/api/orders/checkout
-Authorization: Bearer {{cToken}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
     "CustomerName" : "joo",
-    "Items": [
+    "Items": 
+    [
         {
             "DishId": 1,
             "Quantity": 2
@@ -41,7 +41,7 @@ Accept: application/json
 ###
 
 POST {{webapi}}/api/orders/1?newStatus=Completed
-Authorization: Bearer {{cToken}}
+Authorization: Bearer {{token}}
 Accept: application/json
 ###
 GET {{webapi}}/api/categories
