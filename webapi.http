@@ -65,7 +65,7 @@ Accept: application/json
 
 
 ### Set order status (requires valid token, status can only be 'Pending', 'In Progress', or 'Completed')
-POST {{webapi}}/api/orders/1/status
+PUT {{webapi}}/api/orders/1/status
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
