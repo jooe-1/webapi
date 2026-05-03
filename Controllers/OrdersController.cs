@@ -62,8 +62,8 @@ public class OrdersController : ControllerBase
             var dish = _context.Dishes.Find(item.DishId);
             if (dish is null)
                 return BadRequest(new ApiResponse($"Dish with ID {item.DishId} does not exist!"));
-            if (dish.AvailableQty < item.Quantity)
-                return BadRequest(new ApiResponse($"Not enough bowls available for \"{dish.Name}\"!"));
+            if (item.Quantity <= 0)
+                return BadRequest(new ApiResponse("Quantity must be positive!"));
             dishQuantities.Add((dish, item.Quantity));
         }
 
@@ -76,12 +76,6 @@ public class OrdersController : ControllerBase
 
         if (!result.IsSuccess)
             return BadRequest(new ApiResponse(result.Message));
-
-        foreach (var (dish, quantity) in dishQuantities)
-        {
-            dish.AvailableQty -= quantity;
-            _context.Dishes.Update(dish);
-        }
 
         var order = new Order
         {
