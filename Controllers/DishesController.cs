@@ -51,9 +51,6 @@ public class DishesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public ActionResult<ApiResponse> Post([FromBody] DishCreateDto dto)
     {
-        if (dto.AvailableQty < 0) // بنشيك لو عدد الأطباق المتاحة أقل من صفر
-            return BadRequest(new ApiResponse("Available bowls cannot be negative!"));
-
         if (_context.Dishes.Any(d => d.Name == dto.Name)) // بنشيك لو في طبق بنفس الاسم موجود
             return BadRequest(new ApiResponse("Dish with the same name already exists!"));
 
@@ -67,7 +64,6 @@ public class DishesController : ControllerBase
         {
             Name = dto.Name,
             Price = dto.Price,
-            AvailableQty = dto.AvailableQty,
             CategoryId = catId,
             ImageUrl = dto.ImageUrl
         };
@@ -85,10 +81,6 @@ public class DishesController : ControllerBase
         if (dish is null)
             return NotFound(new ApiResponse("Dish does not exist!"));
 
-        var qty = dto.AvailableQty;
-        if (qty is not null and < 0)
-            return BadRequest(new ApiResponse("Available quantity cannot be negative!"));
-
         var price = dto.Price;
         if (price is not null and <= 0)
             return BadRequest(new ApiResponse("Price must be positive!"));
@@ -105,7 +97,6 @@ public class DishesController : ControllerBase
         var imageUrl = dto.ImageUrl;
 
         if (name is not null) dish.Name = name;
-        if (qty is not null) dish.AvailableQty = qty.Value;
         if (price is not null) dish.Price = price.Value;
         if (catId is not null) dish.Category = category;
         if (imageUrl is not null) dish.ImageUrl = imageUrl;
