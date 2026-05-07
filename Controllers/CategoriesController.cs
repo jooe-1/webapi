@@ -54,7 +54,7 @@ public class CategoriesController : ControllerBase
 
         if (dto.NewName is not null)
         {
-            if (_context.Categories.Any(c => c.Name == dto.NewName))
+            if (_context.Categories.Any(c => c.Name == dto.NewName && c.Id != id))
                 return BadRequest(new ApiResponse("Category with the same name already exists!"));
             category.Name = dto.NewName;
         }
