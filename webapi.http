@@ -39,19 +39,6 @@ Content-Type: application/json
 }
 
 
-### Upload an image for a specific dish
-POST {{webapi}}/api/dishes/1/upload-image
-Authorization: Bearer {{token}}
-Content-Type: multipart/form-data; boundary=boundary
-
---boundary
-Content-Disposition: form-data; name="image"; filename="dish.png"
-Content-Type: image/png
-
-< C:/Users/Youssef/Desktop/7klcfb.jpg
---boundary--
-
-
 ### Checkout an order (requires valid token)
 POST {{webapi}}/api/orders/checkout
 Authorization: Bearer {{token}}
@@ -84,6 +71,11 @@ Content-Type: application/json
 {
     "NewStatus": "Completed"
 }
+
+
+### Delete an order by ID (requires valid token)
+DELETE {{webapi}}/api/orders/1
+Authorization: Bearer {{token}}
 
 
 ### Get all categories
