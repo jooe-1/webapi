@@ -58,8 +58,8 @@ public class OrdersController : ControllerBase
         foreach (var item in dto.Items)
         {
             var dish = _context.Dishes.Find(item.DishId);
-            if (dish is null)
-                return BadRequest(new ApiResponse($"Dish with ID {item.DishId} does not exist!"));
+            if (dish == null || !dish.Active)
+                return BadRequest(new ApiResponse($"Dish with ID {item.DishId} does not exist or is inactive!"));
             if (item.Quantity <= 0)
                 return BadRequest(new ApiResponse("Quantity must be positive!"));
             dishQuantities.Add((dish, item.Quantity));

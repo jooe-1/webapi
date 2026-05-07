@@ -1,5 +1,5 @@
 @webapi = http://localhost:5159
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInJvbGUiOiJBZG1pbiIsIm5hbWVpZCI6IjEiLCJuYmYiOjE3Nzc4NDU1MjksImV4cCI6MTc3NzkzMTkyOSwiaWF0IjoxNzc3ODQ1NTI5fQ.x9d_-zNZSEn9cvopA1PqmYsbOMOOyXRb1OvDXPEpns0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInJvbGUiOiJBZG1pbiIsIm5hbWVpZCI6IjEiLCJuYmYiOjE3NzgxODAwNzAsImV4cCI6MTc3ODI2NjQ3MCwiaWF0IjoxNzc4MTgwMDcwfQ.vjF1LmMNIM35orwSFziy5Kh4sMewICRuP95ytTMoVVw
 
 ### Get all dishes
 GET {{webapi}}/api/dishes
@@ -91,6 +91,16 @@ Accept: application/json
 ### Add a new category (requires admin token)
 POST {{webapi}}/api/categories/Pizza
 Authorization: Bearer {{token}}
+
+
+### Update a category (requires admin token)
+PUT {{webapi}}/api/categories/2
+Authorization: Bearer {{token}}
+
+Content-Type: application/json
+{
+    "Active": true
+}
 
 
 ### Register a new user (requires admin token)
