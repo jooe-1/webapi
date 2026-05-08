@@ -60,7 +60,9 @@ public class AuthController : ControllerBase
         if (_context.Users.Any(u => u.Username == registerInfo.Username))
             return BadRequest(new ApiResponse("Username already exists!"));
         if (!Models.User.IsValidRole(registerInfo.Role))
-            return BadRequest(new ApiResponse("Invalid role! Role must be either 'Admin' or 'Cashier'."));
+            return BadRequest(new ApiResponse("Invalid role! Role must be either 'Admin', 'Cashier' or 'Chef'."));
+        if (registerInfo.Role == "Admin" && Models.User.GetIdFromUser(User) != 1)
+            return Unauthorized(new ApiResponse("Only the super admin can create another admin."));
         var hasher = new PasswordHasher<User>();
         var user = new User
         {

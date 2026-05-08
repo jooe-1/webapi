@@ -17,10 +17,10 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Category>> GetAllCategories()
+    public ActionResult<ArrayHolder<Category>> GetAllCategories()
     {
         var categories = _context.Categories;
-        return Ok(User.IsInRole("Admin") ? categories : categories.Where(c => c.Active));
+        return Ok(ArrayHolder.Create(User.IsInRole("Admin") ? categories : categories.Where(c => c.Active)));
     }
 
     [HttpGet("{id}")]
