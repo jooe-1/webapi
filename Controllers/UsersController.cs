@@ -19,10 +19,10 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<User>> GetAllUsers()
+    public ActionResult<ArrayHolder<User>> GetAllUsers()
     {
-        var users = _context.Users.ToList();
-        return Ok(users);
+        var users = _context.Users;
+        return Ok(ArrayHolder.Create(users));
     }
 
     [HttpGet("{id}")]
@@ -38,7 +38,7 @@ public class UsersController : ControllerBase
     public ActionResult<ApiResponse> Delete(int id)
     {
         if (id == 1)
-            return BadRequest(new ApiResponse("Cannot delete the default admin user!"));
+            return BadRequest(new ApiResponse("Cannot delete the super admin!"));
         var user = _context.Users.Find(id);
         if (user is null)
             return NotFound(new ApiResponse("User does not exist!"));
@@ -50,8 +50,8 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult<ApiResponse> Update(int id, [FromBody] UserUpdateDto updateInfo)
     {
-        if (id == 1)
-            return BadRequest(new ApiResponse("Cannot update the default admin user!"));
+        if (id == 1 && Models.User.GetIdFromUser(User) != 1)
+            return BadRequest(new ApiResponse("Cannot update the super admin!"));
         var user = _context.Users.FirstOrDefault(u => u.Id == id);
         if (user is null)
             return NotFound(new ApiResponse("User does not exist!"));

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using webapi.DTOs;
 using webapi.Models;
 
@@ -21,13 +20,11 @@ public class OrdersController : ControllerBase
 
     // اللينك هيكون: api/orders
     [HttpGet]
-    public ActionResult<List<Order>> GetAllOrders()
+    public ActionResult<ArrayHolder<Order>> GetAllOrders()
     {
         // بيجيب كل الطلبات من الداتابيز ويحولها لـ List
-        var orders = _context.Orders
-            .Include(o => o.Items)
-            .ToList();
-        return Ok(orders);
+        var orders = _context.Orders.Include(o => o.Items);
+        return Ok(ArrayHolder.Create(orders));
     }
 
     // لو عايز تجيب طلب واحد بالـ ID
@@ -45,7 +42,7 @@ public class OrdersController : ControllerBase
 
     [HttpPost("checkout")]
     [Authorize(Roles = "Admin,Cashier")]
-    public async Task<IActionResult> Checkout([FromBody] OrderDto dto)
+    public IActionResult Checkout([FromBody] OrderDto dto)
     {
         if (dto.Items is null || dto.Items.Count == 0)
             return BadRequest(new ApiResponse("Order must contain at least one item."));
@@ -76,7 +73,7 @@ public class OrdersController : ControllerBase
             Status = status ?? "Pending",
             TotalPayment = total,
             Items = dto.Items,
-            UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value)
+            UserId = Models.User.GetIdFromUser(User)
         };
 
 

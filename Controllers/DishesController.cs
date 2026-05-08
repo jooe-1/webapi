@@ -17,18 +17,17 @@ public class DishesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Dish>> GetWithCategory(int? categoryId)
+    public ActionResult<ArrayHolder<Dish>> GetWithCategory(int? categoryId)
     {
         var dishesContext = _context.Dishes;
         if (categoryId is null)
-            return Ok(dishesContext.ToList());
+            return Ok(ArrayHolder.Create(dishesContext));
         if (_context.Categories.Find(categoryId ?? 0) is null)
             return NotFound(new ApiResponse($"Category with ID {categoryId} does not exist!"));
 
         var dishes = dishesContext
-            .Where(d => d.CategoryId == categoryId)
-            .ToList();
-        return Ok(dishes);
+            .Where(d => d.CategoryId == categoryId);
+        return Ok(ArrayHolder.Create(dishes));
     }
 
     [HttpGet("{id}")]

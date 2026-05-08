@@ -62,8 +62,6 @@ app.UseCors("AllowAll");
 // امسح الـ HttpsRedirection لو لسه فيه مشاكل في الـ SSL على الاستضافة المجانية
 // app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
 app.UseAuthentication(); // Who are you?
 app.UseAuthorization();  // What are you allowed to do?
 app.MapControllers();
